@@ -25,7 +25,7 @@ cv2.imwrite('maze_clean_t.jpg',im,[cv2.IMWRITE_JPEG_QUALITY,90])
 # ---- structured annotations
 A['title']=title
 ug={ "U-A":{"under":"A","ends":["A-left-1","A-right"],"polygon":[[540,145],[700,148],[900,152],[1100,142],[1255,129],[1247,153],[1100,170],[900,172],[700,172],[557,176]]},
-     "U-B1":{"under":"B1","ends":["B1-left","B1-right"],"polygon":[[699,338],[790,333],[876,319],[864,353],[790,358],[706,364]]},
+     "U-B1":{"under":"B1","ends":["B1-left","B1-right"],"polygon":[[699,338],[715,341],[740,342],[770,340],[800,336],[835,329],[862,322],[876,319],[864,353],[840,354],[800,358],[760,362],[730,364],[706,364]]},
      "U-BOX":{"under":"BOX","ends":["BOX-top","BOX-bottom"],"polygon":[[670,822],[702,817],[751,966],[691,974]]}}
 A['underground_tunnels']=[{"id":k,"border":"dotted","placeholder_path":True,**v} for k,v in ug.items()]
 ends={e for v in ug.values() for e in v['ends']}
