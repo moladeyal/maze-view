@@ -1,0 +1,26 @@
+{
+  "image": "maze.jpg",
+  "clean_image": "maze_clean.jpg",
+  "size": [1710, 1378],
+  "coords": "pixels in maze.jpg / maze_clean.jpg (origin top-left)",
+  "trampolines": [
+    {"id": "T1", "label": "מקפצה", "center": [345, 579], "radius": 34},
+    {"id": "T2", "label": "מקפצה", "center": [732, 549], "radius": 34},
+    {"id": "T3", "label": "מקפצה", "center": [1130, 549], "radius": 34},
+    {"id": "T4", "label": "מקפצה", "center": [1340, 662], "radius": 34},
+    {"id": "T5", "label": "מקפצה", "center": [775, 919], "radius": 34}
+  ],
+  "trampoline_links": [
+    {"from": "T1", "to": "T2"},
+    {"from": "T3", "to": "T4"},
+    {"from": "T5", "to": "T2"}
+  ],
+  "tunnels": [
+    {"id": "A", "label": "קודם קחו את המשקפת", "shape": "ellipse", "center": [895, 120], "rx": 365, "ry": 88},
+    {"id": "B1", "label": "מקפצה", "shape": "ellipse", "center": [790, 332], "rx": 92, "ry": 45},
+    {"id": "B2", "label": "blob with vertical wave shapes", "shape": "ellipse", "center": [888, 565], "rx": 82, "ry": 150}
+  ],
+  "tunnel_links": [
+    {"from": "B1", "to": "B2"}
+  ]
+}
