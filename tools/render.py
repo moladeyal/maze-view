@@ -55,13 +55,18 @@ for t in A['trampolines']:
 for l in A['trampoline_links']:
     a,b=T[l['from']],T[l['to']]
     arrow(Z(a['center']),Z(b['center']),red,gap=(a['radius']+6)*S)
-U={t['id']:t for t in A['tunnels']}
+C={}
 for t in A['tunnels']:
-    x,y=Z(t['center']);rx,ry=t['rx']*S,t['ry']*S
-    d.ellipse((x-rx,y-ry,x+rx,y+ry),fill=(20,90,230,50),outline=blue,width=10)
-for l in A['tunnel_links']:
-    a,b=U[l['from']],U[l['to']]
-    d.line((*Z(a['center']),*Z(b['center'])),fill=blue,width=10)
+    pts=[Z(p) for p in t['points']]
+    d.polygon(pts,fill=(20,90,230,50),outline=blue)
+    d.line(pts+[pts[0]],fill=blue,width=10,joint='curve')
+    C[t['id']]=(sum(p[0] for p in pts)/len(pts),sum(p[1] for p in pts)/len(pts))
+for r in A['rooms']:
+    x,y=Z(r['center']);rx,ry=r['rx']*S,r['ry']*S
+    d.ellipse((x-rx,y-ry,x+rx,y+ry),fill=(20,160,90,50),outline=(20,160,90,255),width=10)
+    C[r['id']]=(x,y)
+for l in A['connections']:
+    d.line((*C[l['from']],*C[l['to']]),fill=blue,width=10)
 out=Image.alpha_composite(im.convert('RGBA'),ov).convert('RGB')
 out=out.resize((out.width//2,out.height//2),Image.LANCZOS)
 out.save(sys.argv[1],quality=90)
