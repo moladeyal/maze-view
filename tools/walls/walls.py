@@ -17,7 +17,7 @@ def poly_inset(pts,inset):
     t=np.zeros((H,W),np.uint8); cv2.fillPoly(t,[np.array(pts,np.int32)],1)
     t=cv2.erode(t,np.ones((2*inset+1,2*inset+1),np.uint8)); return t
 rect(0,0,205,1378); rect(0,0,430,22)            # stickers/left
-rect(1345,0,1710,310)                            # handwriting top right
+rect(1300,0,1710,148); rect(1352,148,1710,310)                            # handwriting top right
 rect(900,1095,1140,1345)                         # cookie sticker
 rect(1245,1090,1480,1230)                        # tape right
 rect(695,1180,895,1340)                          # tape left
@@ -57,6 +57,12 @@ for o in openings:
     p=shorten(o['cut'],5)
     cv2.polylines(er,[np.round(np.array(p)).astype(np.int32)],False,1,7)
 sk[er>0]=0
+dele=np.zeros((H,W),np.uint8)
+for (cx,cy,rx,ry) in json.load(open('deletions.json')):
+    cv2.ellipse(dele,(cx,cy),(rx,ry),0,0,360,1,-1)
+sk[dele>0]=0
+for seg in json.load(open('patches.json')):
+    cv2.polylines(sk,[np.array(seg,np.int32)],False,1,1)
 for o in openings:
     for seg in o.get('add',[]):
         cv2.polylines(sk,[np.array(seg,np.int32)],False,1,1)
