@@ -30,6 +30,10 @@ ug={ "U-A":{"under":"A","ends":["A-left-1","A-right"],"polygon":[[540,145],[700,
 A['underground_tunnels']=[{"id":k,"border":"dotted","placeholder_path":True,**v} for k,v in ug.items()]
 ends={e for v in ug.values() for e in v['ends']}
 A['openings']=[{"id":o['id'],"structure":o['structure'],"kind":"underground_tunnel_end" if o['id'] in ends else "room_entrance","outline_removed":o['cut']} for o in O]
+AP={a['id']:p for a,p in zip(json.load(open('arrows.json')),json.load(open('arrow_paths.json')))}
+for l in A['trampoline_links']:
+    l['arrow_path']=AP.get(l['from']+'-'+l['to'])
+A['pointer_arrows']=[{"id":k,"path":AP[k],"note":"label pointer drawn by the child; NOT a corridor wall"} for k in AP if k not in {l['from']+'-'+l['to'] for l in A['trampoline_links']}]
 A['walls']=W
 A['notes']={"walls":"thin centre-lines of the pencil corridor borders (open polylines [[x,y],...]), auto-traced ~2px tolerance; small gaps patched by hand",
  "underground_tunnels":"polygon path under the room is a straight placeholder between the two tunnel ends, not drawn by the child",
@@ -48,6 +52,13 @@ for v in ug.values(): dotted(v['polygon'],(0,140,255))
 for o in O:
     kind='t' if o['id'] in ends else 'r'
     cv2.polylines(big,[Pn(o['cut'])],False,(120,120,120) if kind=='t' else (0,170,0),5 if kind=='t' else 4,cv2.LINE_AA)
+Tm={t['id']:t for t in A['trampolines']}
+for l in A['trampoline_links']:
+    a,b=Tm[l['from']],Tm[l['to']]
+    p=np.array(a['center'],float)*S;q=np.array(b['center'],float)*S
+    u=(q-p)/np.linalg.norm(q-p); gap=(a['radius']+6)*S
+    p2=p+u*gap; q2=q-u*gap
+    cv2.arrowedLine(big,tuple(p2.astype(int)),tuple(q2.astype(int)),(0,0,230),7,cv2.LINE_AA,tipLength=0.07)
 for t in A['trampolines']: cv2.circle(big,tuple((np.array(t['center'])*S).tolist()),t['radius']*S,(0,0,230),5,cv2.LINE_AA)
 big=cv2.resize(big,(2000,int(big.shape[0]*2000/big.shape[1])),interpolation=cv2.INTER_AREA)
 cv2.imwrite('maze_walls_s.jpg',big,[cv2.IMWRITE_JPEG_QUALITY,88])
