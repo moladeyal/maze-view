@@ -61,12 +61,6 @@ for t in A['tunnels']:
     d.polygon(pts,fill=(20,90,230,50),outline=blue)
     d.line(pts+[pts[0]],fill=blue,width=10,joint='curve')
     C[t['id']]=(sum(p[0] for p in pts)/len(pts),sum(p[1] for p in pts)/len(pts))
-for r in A['rooms']:
-    x,y=Z(r['center']);rx,ry=r['rx']*S,r['ry']*S
-    d.ellipse((x-rx,y-ry,x+rx,y+ry),fill=(20,160,90,50),outline=(20,160,90,255),width=10)
-    C[r['id']]=(x,y)
-for l in A['connections']:
-    d.line((*C[l['from']],*C[l['to']]),fill=blue,width=10)
 out=Image.alpha_composite(im.convert('RGBA'),ov).convert('RGB')
 out=out.resize((out.width//2,out.height//2),Image.LANCZOS)
 out.save(sys.argv[1],quality=90)
